@@ -31,6 +31,10 @@ Please refer to the default parameter settings in "def parse_args()" of main.py 
 # Test
 python main.py --phase test --test_dataset_path TEST_DATASET_PATH --model_name MODEL_NAME
 
-MODEL_NAME 
+Test images and our trained model can be found at https://sites.google.com/view/sehyung/home 
+
+Please ensure that TEST_DATASET_PATH and MODEL_NAME are the trained model and test image folders
+
+Output images will be generated in the subfolder of MODEL_NAME 
 
 
