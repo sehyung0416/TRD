@@ -14,7 +14,7 @@ We verified that RTX 2080ti and V100 GPUs are working with CUDA 10.1
 # Training
 python ./src/main.py --phase train --training_dataset_path DATASET_PATH --model_name MODEL_NAME
 
-In this implementation, we provide sample training images that can be found at https://sites.google.com/view/sehyung/home/projects
+In this implementation, we provide sample training images that can be found at (https://sites.google.com/view/sehyung/home/projects)
 
 Please prepare the training images and set to DATASET_PATH when you run the training command
 
@@ -36,7 +36,7 @@ Please refer to the default parameter settings in "def parse_args()" of main.py 
 # Test
 python main.py --phase test --test_dataset_path TEST_DATASET_PATH --model_name MODEL_NAME
 
-Test images and our trained model can be found at https://sites.google.com/view/sehyung/home 
+Test images and our trained model can be found at (https://sites.google.com/view/sehyung/home/projects)
 
 Please ensure that TEST_DATASET_PATH and MODEL_NAME are the trained model and test image folders
 
