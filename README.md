@@ -1,11 +1,3 @@
-# Reference
-Sehyung Lee, Hideaki Kume, Hidetoshi Urakubo, Haruo Kasai, Shin Ishii, "Tri-view two-photon microscopic image registration and deblurring with convolutional neural networks", Neural Networks 2022. 
-
-<p align="center">
-  <img width="45%" src="./figures/demo1.gif" />
-  <img width="45%" src="./figures/demo2.gif" />
-</p>
-
 # Requirements 
 Tensorflow v1.15, python 3.7.6, scipy, and tifffile (3D image read and write)
 
@@ -42,4 +34,11 @@ Please ensure that TEST_DATASET_PATH and MODEL_NAME are the trained model and te
 
 Output images will be generated in the subfolder of MODEL_NAME 
 
+# Reference
+Sehyung Lee, Hideaki Kume, Hidetoshi Urakubo, Haruo Kasai, Shin Ishii, "Tri-view two-photon microscopic image registration and deblurring with convolutional neural networks", Neural Networks 2022. 
+
+<p align="center">
+  <img width="45%" src="./figures/demo1.gif" />
+  <img width="45%" src="./figures/demo2.gif" />
+</p>
 
