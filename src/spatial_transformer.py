@@ -1,6 +1,8 @@
 import tensorflow as tf
 # We acknowledge VoxelMorph for providing an alternative implementation of the 3D spatial trasnformer.
 # Modified from https://github.com/voxelmorph/voxelmorph
+
+
 class Dense3DSpatialTransformer():
     def __init__(self, padding = False, **kwargs):
         self.padding = padding
@@ -39,12 +41,12 @@ class Dense3DSpatialTransformer():
         y_mesh = tf.tile(y_mesh, [batch_size, 1, 1, 1])
         z_mesh = tf.tile(z_mesh, [batch_size, 1, 1, 1])
 
-        x_trs = pred_params[...,0]*max_trs
-        y_trs = pred_params[...,1]*max_trs
-        z_trs = pred_params[...,2]*max_trs
-        x_trs = tf.reshape(x_trs, [batch_size,1,1,1])
-        y_trs = tf.reshape(y_trs, [batch_size,1,1,1])
-        z_trs = tf.reshape(z_trs, [batch_size,1,1,1])
+        x_trs = pred_params[..., 0]*max_trs
+        y_trs = pred_params[..., 1]*max_trs
+        z_trs = pred_params[..., 2]*max_trs
+        x_trs = tf.reshape(x_trs, [batch_size, 1, 1, 1])
+        y_trs = tf.reshape(y_trs, [batch_size, 1, 1, 1])
+        z_trs = tf.reshape(z_trs, [batch_size, 1, 1, 1])
         
         tx = tf.tile(x_trs, [1, height, width, depth])
         ty = tf.tile(y_trs, [1, height, width, depth])
@@ -55,21 +57,21 @@ class Dense3DSpatialTransformer():
         z_ptr = tf.reshape(z_mesh, [batch_size, 1, height*width*depth])
         
         pi = 3.141592653589793
-        a = pred_params[...,3]*max_angle*pi/180.
-        b = pred_params[...,4]*max_angle*pi/180.
-        c = pred_params[...,5]*max_angle*pi/180.
-            
-        m_11 = tf.cos(a)*tf.cos(b)
-        m_21 = tf.sin(a)*tf.cos(b)
+        a = pred_params[..., 3] * max_angle * pi / 180.
+        b = pred_params[..., 4] * max_angle * pi / 180.
+        c = pred_params[..., 5] * max_angle * pi / 180.
+
+        m_11 = tf.cos(a) * tf.cos(b)
+        m_21 = tf.sin(a) * tf.cos(b)
         m_31 = -tf.sin(b)
-        
-        m_12 = tf.cos(a)*tf.sin(b)*tf.sin(c) - tf.sin(a)*tf.cos(c)
-        m_22 = tf.sin(a)*tf.sin(b)*tf.sin(c) + tf.cos(a)*tf.cos(c)
-        m_32 = tf.cos(b)*tf.sin(c)
-        
-        m_13 = tf.cos(a)*tf.sin(b)*tf.cos(c) + tf.sin(a)*tf.sin(c)
-        m_23 = tf.sin(a)*tf.sin(b)*tf.cos(c) - tf.cos(a)*tf.sin(c)
-        m_33 = tf.cos(b)*tf.cos(c)
+
+        m_12 = tf.cos(a) * tf.sin(b) * tf.sin(c) - tf.sin(a) * tf.cos(c)
+        m_22 = tf.sin(a) * tf.sin(b) * tf.sin(c) + tf.cos(a) * tf.cos(c)
+        m_32 = tf.cos(b) * tf.sin(c)
+
+        m_13 = tf.cos(a) * tf.sin(b) * tf.cos(c) + tf.sin(a) * tf.sin(c)
+        m_23 = tf.sin(a) * tf.sin(b) * tf.cos(c) - tf.cos(a) * tf.sin(c)
+        m_33 = tf.cos(b) * tf.cos(c)
         
         m_11 = tf.expand_dims(m_11, 1)
         m_21 = tf.expand_dims(m_21, 1)
@@ -82,19 +84,19 @@ class Dense3DSpatialTransformer():
         m_13 = tf.expand_dims(m_13, 1)
         m_23 = tf.expand_dims(m_23, 1)
         m_33 = tf.expand_dims(m_33, 1)
-        
-        m_1 = tf.concat([m_11,m_21,m_31],1)
-        m_2 = tf.concat([m_12,m_22,m_32],1)
-        m_3 = tf.concat([m_13,m_23,m_33],1)
+
+        m_1 = tf.concat([m_11, m_21, m_31], 1)
+        m_2 = tf.concat([m_12, m_22, m_32], 1)
+        m_3 = tf.concat([m_13, m_23, m_33], 1)
         
         m_1 = tf.expand_dims(m_1, 2)
         m_2 = tf.expand_dims(m_2, 2)
         m_3 = tf.expand_dims(m_3, 2)
-        m = tf.concat([m_1,m_2,m_3],2)
-        
-        ptr = tf.concat([x_ptr,y_ptr,z_ptr],1)
-        rot_ptr = tf.matmul(m,ptr)
-        
+        m = tf.concat([m_1, m_2, m_3], 2)
+
+        ptr = tf.concat([x_ptr, y_ptr, z_ptr], 1)
+        rot_ptr = tf.matmul(m, ptr)
+
         x_rot, y_rot, z_rot = tf.split(rot_ptr, num_or_size_splits=3, axis=1)
         x_rot = tf.reshape(x_rot, [batch_size, height, width, depth])
         y_rot = tf.reshape(y_rot, [batch_size, height, width, depth])
@@ -116,7 +118,7 @@ class Dense3DSpatialTransformer():
 
     def _feat_warp(self, feat, motion, ratio):        
         dx, dy, dz = tf.split(motion, num_or_size_splits=3, axis=4)
-        avg_kernel = tf.ones([ratio,ratio,ratio,1,1])/(ratio*ratio*ratio)
+        avg_kernel = tf.ones([ratio, ratio, ratio, 1, 1]) / (ratio * ratio * ratio)
         resize_dx = tf.nn.conv3d(dx, avg_kernel, strides=[1, ratio, ratio, ratio, 1], padding='VALID')/ratio
         resize_dy = tf.nn.conv3d(dy, avg_kernel, strides=[1, ratio, ratio, ratio, 1], padding='VALID')/ratio
         resize_dz = tf.nn.conv3d(dz, avg_kernel, strides=[1, ratio, ratio, ratio, 1], padding='VALID')/ratio

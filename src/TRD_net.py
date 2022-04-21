@@ -10,6 +10,7 @@ import cnn_models
 from glob import glob
 from spatial_transformer import Dense3DSpatialTransformer
 
+
 class TRDNet():
     
     def __init__(self, args):    
@@ -48,21 +49,21 @@ class TRDNet():
         self.dataset_num = len(self.train_dataset_list)
         
         file = open(os.path.join(args.model_name, 'args.txt'), "w")
-        file.write("%s = %s\n" %('batch_size', self.batch_size))
-        file.write("%s = %s\n" %('in_patch_size', self.in_patch_size))
-        file.write("%s = %s\n" %('out_patch_size', self.out_patch_size))
-        file.write("%s = %s\n" %('learning_rate', self.learning_rate))
-        file.write("%s = %s\n" %('beta1', self.beta1))
-        file.write("%s = %s\n" %('beta2', self.beta2))
-        file.write("%s = %s\n" %('max_angle', self.max_angle))
-        file.write("%s = %s\n" %('max_trs', self.max_trs))
-        file.write("%s = %s\n" %('nf', self.nf))
-        file.write("%s = %s\n" %('fz', self.fz))
-        file.write("%s = %s\n" %('blur_sigma', self.blur_sigma))
-        file.write("%s = %s\n" %('smooth_weight', self.smooth_weight))
-        file.write("%s = %s\n" %('training_epochs', self.training_epochs))
-        file.write("%s = %s\n" %('print_freq', self.print_freq))
-        file.close()    
+        file.write("%s = %s\n" % ('batch_size', self.batch_size))
+        file.write("%s = %s\n" % ('in_patch_size', self.in_patch_size))
+        file.write("%s = %s\n" % ('out_patch_size', self.out_patch_size))
+        file.write("%s = %s\n" % ('learning_rate', self.learning_rate))
+        file.write("%s = %s\n" % ('beta1', self.beta1))
+        file.write("%s = %s\n" % ('beta2', self.beta2))
+        file.write("%s = %s\n" % ('max_angle', self.max_angle))
+        file.write("%s = %s\n" % ('max_trs', self.max_trs))
+        file.write("%s = %s\n" % ('nf', self.nf))
+        file.write("%s = %s\n" % ('fz', self.fz))
+        file.write("%s = %s\n" % ('blur_sigma', self.blur_sigma))
+        file.write("%s = %s\n" % ('smooth_weight', self.smooth_weight))
+        file.write("%s = %s\n" % ('training_epochs', self.training_epochs))
+        file.write("%s = %s\n" % ('print_freq', self.print_freq))
+        file.close()
                       
         self.reg_net = cnn_models.RegNet(args)
         self.deblur_net = cnn_models.DeblurNet(args)
@@ -143,7 +144,7 @@ class TRDNet():
         self.loss_setup()        
         saver = tf.train.Saver()
         
-        with tf.Session( ) as sess: 
+        with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
             tf.get_default_graph().finalize()
             
@@ -166,14 +167,14 @@ class TRDNet():
             for epoch in range(0, self.training_epochs):
                 if epoch % self.simulation_interval == 0:
                     print("synthetic image generation")
-                    # self.data_simulation(img_list, self.training_dataset_path)
-                
+                    self.data_simulation(img_list, self.training_dataset_path)
+
                 np.random.shuffle(img_list)
                 for seq in range(0, iter_per_epoch):
                     source_batch = []
                     aligned_batch = []
                     misaligned_batch = []
-                    for i in range(0,self.batch_size):                        
+                    for i in range(0, self.batch_size):
                         source_img = tiff.imread("%s/%s" % (source_image_path, img_list[seq*self.batch_size+i]))
                         aligned_img = tiff.imread("%s/%s" % (align_image_path, img_list[seq*self.batch_size+i]))
                         misaligned_img = tiff.imread("%s/%s" % (misalign_image_path, img_list[seq*self.batch_size+i]))
@@ -205,7 +206,7 @@ class TRDNet():
                                  feed_dict={self.fused_imgs: source_batch, self.z_view_slice: z_view_slice,
                                             self.y_view_slice: y_view_slice, self.x_view_slice: x_view_slice})
 
-                    if seq%self.print_freq == 0:
+                    if seq % self.print_freq == 0:
                         align_path = './{}/align_{:02d}_{:06d}.tif'.format(self.sample_dir, epoch, seq+1)
                         fuse_path = './{}/fuse_{:02d}_{:06d}.tif'.format(self.sample_dir, epoch, seq+1)
                         
