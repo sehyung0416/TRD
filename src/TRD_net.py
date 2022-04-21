@@ -166,7 +166,7 @@ class TRDNet():
             for epoch in range(0, self.training_epochs):
                 if epoch % self.simulation_interval == 0:
                     print("synthetic image generation")
-                    self.data_simulation(img_list, self.training_dataset_path)
+                    # self.data_simulation(img_list, self.training_dataset_path)
                 
                 np.random.shuffle(img_list)
                 for seq in range(0, iter_per_epoch):

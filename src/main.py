@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for ADAM optimizer')
     parser.add_argument('--beta2', type=float, default=0.9, help='beta2 for ADAM optimizer')
     
-    parser.add_argument('--batch_size', type=int, default=16, help='The batch size')
+    parser.add_argument('--batch_size', type=int, default=4, help='The batch size')
     parser.add_argument('--in_patch_size', type=int, default=128, help='The input patch size')
     parser.add_argument('--out_patch_size', type=int, default=96, help='The output patch size')
     parser.add_argument('--simulation_interval', type=int, default=5, help='The simulation interval')
