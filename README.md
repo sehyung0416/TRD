@@ -2,8 +2,8 @@
 Sehyung Lee, Hideaki Kume, Hidetoshi Urakubo, Haruo Kasai, Shin Ishii, "Tri-view two-photon microscopic image registration and deblurring with convolutional neural networks", Neural Networks 2022. 
 
 <p align="center">
-  <img width="50%" src="./figures/demo1.gif" />
-  <img width="50%" src="./figures/demo2.gif" />
+  <img width="33%" src="./figures/demo1.gif" />
+  <img width="33%" src="./figures/demo2.gif" />
 </p>
 
 # Requirements 
